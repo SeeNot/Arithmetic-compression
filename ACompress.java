@@ -38,7 +38,7 @@ public class ACompress {
 
             br.close();
             long upperLimit, lowerLimit, difference;
-            int counter = 0;
+            int counter = 0, extranumbers=0;
             byte toOut = 0;
             HashMap<Character,long[]> oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, maxValue);
             br = new BufferedReader
@@ -72,6 +72,7 @@ public class ACompress {
                     if (counter == 7){
                         output.write(toOut);
                         toOut = 0;
+                        counter = 0;
                     }
 
 
