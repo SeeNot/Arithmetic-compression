@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class ACompress {
         long charAmount = 0;
 
         try {
+            FileOutputStream output = new FileOutputStream(resultFile);
             BufferedReader br = new BufferedReader
                     (new InputStreamReader
                             (new FileInputStream(sourceFile), StandardCharsets.UTF_8));
@@ -35,14 +37,58 @@ public class ACompress {
             }
 
             br.close();
+            long upperLimit, lowerLimit, difference;
+            int counter = 0;
+            byte toOut = 0;
+            HashMap<Character,long[]> oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, maxValue);
+            br = new BufferedReader
+                    (new InputStreamReader
+                            (new FileInputStream(sourceFile), StandardCharsets.UTF_8));
+            while ((line = br.readLine()) != null) {
+                char[] chars = line.toCharArray();
+                for (char letter : chars) {
+
+                    lowerLimit = oddsTable.get(letter)[0];
+                    upperLimit = oddsTable.get(letter)[1];
+
+                    difference = upperLimit - lowerLimit;
+
+                    oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, difference, lowerLimit);
+
+                    System.out.println(lowerLimit + " " + upperLimit + " " + difference);
+
+                    if (upperLimit < halfValue) {
+                        toOut <<= 1;
+                        halfValue /= 2;
+                        counter++;
+                    }
+                    else if (lowerLimit > halfValue) {
+                        toOut |= 1;
+                        toOut <<= 1;
+                        halfValue = halfValue/2 + halfValue;
+                        counter++;
+                    }
+
+                    if (counter == 7){
+                        output.write(toOut);
+                        toOut = 0;
+                    }
 
 
-            HashMap<Character,long[]> oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, Long.MAX_VALUE);
 
-            for (HashMap.Entry<Character,long[]> entry : oddsTable.entrySet()) {
-                System.out.println(entry.getKey() + " " + entry.getValue()[0] + " " + entry.getValue()[1]);
+                }
 
             }
+
+            long intendedupper = Long.MAX_VALUE, intendedlower;
+
+
+
+
+//            for (HashMap.Entry<Character,long[]> entry : oddsTable.entrySet()) {
+//                System.out.println(entry.getKey() + " " + entry.getValue()[0] + " " + entry.getValue()[1]);
+//
+//            }
 
 
         } catch (Exception e){

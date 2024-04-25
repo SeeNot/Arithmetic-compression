@@ -25,13 +25,30 @@ public class PCalculator {
 
         }
 
+        return finalOddsTabel;
+
+    }
+
+
+    public static HashMap<Character,long[]> recalculateOddsTabel(HashMap<Character,Integer> ptabel,long charAmount , long maxvalue, long offset ) {
+        HashMap<Character,long[]> finalOddsTabel = new HashMap<>();
+
+        long iedalasvertiba = maxvalue/charAmount;
+        long apaksejaVertiba = offset;
+        for (HashMap.Entry<Character, Integer> entry : ptabel.entrySet()) {
+
+            long[] limiti = {apaksejaVertiba, apaksejaVertiba + iedalasvertiba*entry.getValue()};
+            finalOddsTabel.put(entry.getKey(), limiti);
+            apaksejaVertiba += iedalasvertiba*entry.getValue();
+
+        }
+
 
         return finalOddsTabel;
 
 
 
     }
-
 
 
 
