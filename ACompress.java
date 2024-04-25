@@ -11,11 +11,15 @@ public class ACompress {
         resultFile = sc.next();
 
 
+        PCalculator.Calculate(sourceFile);
+
+
+
+
 
 
 
         sc.close();
-
 
     }
 
