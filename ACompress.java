@@ -19,7 +19,6 @@ public class ACompress {
 
 
 
-        sc.close();
 
     }
 

@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 public class PCalculator {
@@ -16,11 +17,20 @@ public class PCalculator {
         try {
             BufferedReader br = new BufferedReader
                     (new InputStreamReader
-                            (new FileInputStream(FileName), "UTF-8"));
+                            (new FileInputStream(FileName), StandardCharsets.UTF_8));
             String line;
             while ((line = br.readLine()) != null) {
                 probabilityCalculator(charCounter, line);
                 charAmount += line.length();
+            }
+
+
+
+            for (HashMap.Entry<Character, Integer> entry : charCounter.entrySet()) {
+
+
+
+
             }
 
 
@@ -33,14 +43,10 @@ public class PCalculator {
 
 
 
-
-
-
-
     }
     public static void probabilityCalculator(HashMap<Character,Integer> ptabel, String line) {
 
-        for (int i = 0; i <= line.length(); i++) {
+        for (int i = 0; i < line.length(); i++) {
             if (ptabel.containsKey(line.charAt(i))) {
                 ptabel.replace(line.charAt(i), ptabel.get(line.charAt(i)), ptabel.get(line.charAt(i))+1);
             }
