@@ -29,7 +29,7 @@ public class PCalculator {
 
                 long[] limiti = {apaksejaVertiba, apaksejaVertiba + iedalasvertiba*entry.getValue()};
                 finalOddsTabel.put(entry.getKey(), limiti);
-                apaksejaVertiba += iedalasvertiba*entry.getKey();
+                apaksejaVertiba += iedalasvertiba*entry.getValue();
 
             }
 
