@@ -6,13 +6,12 @@ import java.util.HashMap;
 
 public class PCalculator {
 
-    public static void Calculate(String FileName){
+    public static HashMap<Character,long[]> Calculate(String FileName){
 
-        HashMap<Character,int[]> finalOddsTabel = new HashMap<>();
+        HashMap<Character,long[]> finalOddsTabel = new HashMap<>();
         HashMap<Character,Integer> charCounter = new HashMap<>();
 
         long charAmount = 0;
-
 
         try {
             BufferedReader br = new BufferedReader
@@ -24,24 +23,31 @@ public class PCalculator {
                 charAmount += line.length();
             }
 
-
-
+            long iedalasvertiba = Long.MAX_VALUE/charAmount;
+            long apaksejaVertiba = 0;
             for (HashMap.Entry<Character, Integer> entry : charCounter.entrySet()) {
 
-
-
+                long[] limiti = {apaksejaVertiba, apaksejaVertiba + iedalasvertiba*entry.getValue()};
+                finalOddsTabel.put(entry.getKey(), limiti);
+                apaksejaVertiba += iedalasvertiba*entry.getKey();
 
             }
 
 
 
+
+
+
             br.close();
+
+
+
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
 
 
-
+        return finalOddsTabel;
 
     }
     public static void probabilityCalculator(HashMap<Character,Integer> ptabel, String line) {
