@@ -9,7 +9,8 @@ import java.util.Scanner;
 public class ACompress {
 
     public static void compress(){
-        String sourceFile, resultFile;
+        String sourceFile = "C:\\Users\\ozoli\\Desktop\\testaFails_1.txt", resultFile;
+       // C:\Users\ozoli\Desktop\lol.txt
         Scanner sc = new Scanner(System.in);
         System.out.print("source file name: ");
         sourceFile = sc.next();
@@ -57,10 +58,24 @@ public class ACompress {
 
                     System.out.println(lowerLimit + " " + upperLimit + " " + difference);
 
-                    if (upperLimit < halfValue) {
+
+                    if ((lowerLimit <= halfValue && lowerLimit > halfValue/2) && (upperLimit < halfValue + halfValue/2 && upperLimit >= halfValue)) {
+
+                    }
+                    else if (lowerLimit <= halfValue/2 && upperLimit >= halfValue) {
+                    }
+                    else if (lowerLimit <= halfValue && upperLimit <= halfValue + halfValue/2) {
+                    // krc sitie tie if, kuri mums jaizdoma, un man liekas mes esam done, bet the tos while man liekas vjg
+                    }
+                    // un te vel jaizdoma, ka mes dalam baitos, jo var but ( es pielauju ), ka mums uzreiz 5 nulles jaliek klat, un tad vinas kka uz nakamo
+                    // baitu japarceļ vai kkas tads
+                    // un sitas bus visiem tajiem extra 3 ifiem
+
+                    else if (upperLimit < halfValue) {
                         toOut <<= 1;
                         halfValue /= 2;
                         counter++;
+
                     }
                     else if (lowerLimit > halfValue) {
                         toOut |= 1;
@@ -69,12 +84,12 @@ public class ACompress {
                         counter++;
                     }
 
-                    if (counter == 7){
+                    if (counter == 8){
                         output.write(toOut);
                         toOut = 0;
                         counter = 0;
                     }
-
+                    System.out.println(halfValue);
 
 
                 }
