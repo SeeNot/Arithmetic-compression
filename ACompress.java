@@ -15,7 +15,7 @@ public class ACompress {
         sourceFile = sc.next();
         System.out.print("archive name: ");
         resultFile = sc.next();
-        long maxValue = Long.MAX_VALUE;
+        long maxValue = 0xFFFFFFF;
         long minValue = 0L;
         long halfValue = maxValue/2;
         long quarterValue = maxValue/4;
@@ -52,7 +52,7 @@ public class ACompress {
 
                     difference = upperLimit - lowerLimit;
 
-                    oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, difference, lowerLimit);
+
 
                     System.out.println(lowerLimit + " " + upperLimit + " " + difference);
 
@@ -61,23 +61,26 @@ public class ACompress {
                             toOut <<= 1;
                             counter++;
                             tryToOutput(toOut, counter, unseenBits, resultFile);
+                            upperLimit <<= 1;
+                            lowerLimit <<= 1;
                         } else if (lowerLimit > halfValue) {
                             toOut |= 1;
                             toOut <<= 1;
                             counter++;
                             tryToOutput(toOut, counter, unseenBits, resultFile);
+                            upperLimit = 2*(upperLimit-halfValue);
+                            lowerLimit = 2*(lowerLimit-halfValue);
                         } else if (lowerLimit >= quarterValue && upperLimit < quarterValue * 3) {
                             unseenBits++;
-                            lowerLimit -= quarterValue;
-                            upperLimit -= quarterValue;
+                            lowerLimit = 2*(lowerLimit - quarterValue);
+                            upperLimit = 2*(upperLimit - quarterValue);
                             counter++;
                             tryToOutput(toOut, counter, unseenBits, resultFile);
                         } else break;
 
-                        upperLimit <<= 1;
-                        upperLimit++;
-                        lowerLimit <<= 1;
 
+
+                        oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, difference, lowerLimit);
 
                     }
 
@@ -138,6 +141,9 @@ public class ACompress {
 
 
     }
+
+
+
 
 
 

@@ -33,7 +33,7 @@ public class PCalculator {
     public static HashMap<Character,long[]> recalculateOddsTabel(HashMap<Character,Integer> ptabel,long charAmount , long maxvalue, long offset ) {
         HashMap<Character,long[]> finalOddsTabel = new HashMap<>();
 
-        long iedalasvertiba = maxvalue/charAmount;
+        long iedalasvertiba = Math.round(maxvalue*1.0/charAmount);
         long apaksejaVertiba = offset;
         for (HashMap.Entry<Character, Integer> entry : ptabel.entrySet()) {
 
