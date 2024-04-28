@@ -9,8 +9,7 @@ import java.util.Scanner;
 public class ACompress {
 
     public static void compress(){
-        String sourceFile = "C:\\Users\\ozoli\\Desktop\\testaFails_1.txt", resultFile;
-       // C:\Users\ozoli\Desktop\lol.txt
+        String sourceFile, resultFile;
         Scanner sc = new Scanner(System.in);
         System.out.print("source file name: ");
         sourceFile = sc.next();
@@ -39,8 +38,7 @@ public class ACompress {
 
             br.close();
             long upperLimit, lowerLimit, difference;
-            int counter = 0, extranumbers=0;
-            byte toOut = 0;
+            byte unseenBits = 0, toOut = 0, counter = 0;
             HashMap<Character,long[]> oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, maxValue);
             br = new BufferedReader
                     (new InputStreamReader
@@ -58,38 +56,31 @@ public class ACompress {
 
                     System.out.println(lowerLimit + " " + upperLimit + " " + difference);
 
+                    while (true) {
+                        if (upperLimit < halfValue) {
+                            toOut <<= 1;
+                            counter++;
+                        } else if (lowerLimit > halfValue) {
+                            toOut |= 1;
+                            toOut <<= 1;
+                            counter++;
+                        } else if (lowerLimit >= quarterValue && upperLimit < quarterValue * 3) {
+                            unseenBits++;
+                            lowerLimit -= quarterValue;
+                            upperLimit -= quarterValue;
+                            counter++;
+                            tryToOutput(toOut, counter, unseenBits, resultFile);
+                        } else break;
 
-                    if ((lowerLimit <= halfValue && lowerLimit > halfValue/2) && (upperLimit < halfValue + halfValue/2 && upperLimit >= halfValue)) {
+                        upperLimit <<= 1;
+                        upperLimit++;
+                        lowerLimit <<= 1;
 
-                    }
-                    else if (lowerLimit <= halfValue/2 && upperLimit >= halfValue) {
-                    }
-                    else if (lowerLimit <= halfValue && upperLimit <= halfValue + halfValue/2) {
-                    // krc sitie tie if, kuri mums jaizdoma, un man liekas mes esam done, bet the tos while man liekas vjg
-                    }
-                    // un te vel jaizdoma, ka mes dalam baitos, jo var but ( es pielauju ), ka mums uzreiz 5 nulles jaliek klat, un tad vinas kka uz nakamo
-                    // baitu japarceļ vai kkas tads
-                    // un sitas bus visiem tajiem extra 3 ifiem
 
-                    else if (upperLimit < halfValue) {
-                        toOut <<= 1;
-                        halfValue /= 2;
-                        counter++;
-
-                    }
-                    else if (lowerLimit > halfValue) {
-                        toOut |= 1;
-                        toOut <<= 1;
-                        halfValue = halfValue/2 + halfValue;
-                        counter++;
                     }
 
-                    if (counter == 8){
-                        output.write(toOut);
-                        toOut = 0;
-                        counter = 0;
-                    }
-                    System.out.println(halfValue);
+
+
 
 
                 }
@@ -118,6 +109,34 @@ public class ACompress {
 
 
     }
+
+    public static void tryToOutput(byte theByte, byte counter, byte unseenBits, String resultFile) {
+
+        if (counter == 7) {
+            try {
+                FileOutputStream output = new FileOutputStream(resultFile, true);
+                counter = 0;
+                byte lastBit = (byte) ((theByte >> 1) & 1);
+                for (int i = 0; i < unseenBits; i++) {
+                    if (lastBit == 0) {
+                        theByte |= 1;
+                        theByte <<= 1;
+                    } else {
+                        theByte <<= 1;
+                    }
+                }
+                theByte <<= 1;
+                output.write(theByte);
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+
+        }
+
+
+    }
+
+
 
 
 }
