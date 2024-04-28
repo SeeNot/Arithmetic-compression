@@ -15,7 +15,8 @@ public class ACompress {
         sourceFile = sc.next();
         System.out.print("archive name: ");
         resultFile = sc.next();
-        long maxValue = 0xFFFFFFF;
+        long maxValue = (long)Math.pow(2,63);
+        System.out.println(maxValue);
         long minValue = 0L;
         long halfValue = maxValue/2;
         long quarterValue = maxValue/4;
@@ -26,7 +27,6 @@ public class ACompress {
         long charAmount = 0;
 
         try {
-            FileOutputStream output = new FileOutputStream(resultFile);
             BufferedReader br = new BufferedReader
                     (new InputStreamReader
                             (new FileInputStream(sourceFile), StandardCharsets.UTF_8));
@@ -63,7 +63,7 @@ public class ACompress {
                             tryToOutput(toOut, counter, unseenBits, resultFile);
                             upperLimit <<= 1;
                             lowerLimit <<= 1;
-                        } else if (lowerLimit > halfValue) {
+                        } else if (lowerLimit >= halfValue) {
                             toOut |= 1;
                             toOut <<= 1;
                             counter++;
@@ -79,8 +79,6 @@ public class ACompress {
                         } else break;
 
 
-
-                        oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, difference, lowerLimit);
 
                     }
 
