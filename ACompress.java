@@ -60,10 +60,12 @@ public class ACompress {
                         if (upperLimit < halfValue) {
                             toOut <<= 1;
                             counter++;
+                            tryToOutput(toOut, counter, unseenBits, resultFile);
                         } else if (lowerLimit > halfValue) {
                             toOut |= 1;
                             toOut <<= 1;
                             counter++;
+                            tryToOutput(toOut, counter, unseenBits, resultFile);
                         } else if (lowerLimit >= quarterValue && upperLimit < quarterValue * 3) {
                             unseenBits++;
                             lowerLimit -= quarterValue;
@@ -126,6 +128,7 @@ public class ACompress {
                     }
                 }
                 theByte <<= 1;
+                output.write(theByte);
                 output.write(theByte);
             } catch (Exception e){
                 System.out.println(e.getMessage());
