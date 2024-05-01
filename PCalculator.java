@@ -44,10 +44,28 @@ public class PCalculator {
         }
 
 
+
         return finalOddsTabel;
 
 
 
+    }
+
+
+
+    public static HashMap<Character,Long> oddsAsNumbers(HashMap<Character,Integer> ptabel, long charAmount) {
+        HashMap<Character,Long> finalOddsTabel = new HashMap<>();
+
+
+        for (HashMap.Entry<Character, Integer> entry : ptabel.entrySet()) {
+//            Long odd = Math.round(entry.getValue()*1.0/charAmount);
+            int value = entry.getValue();
+            Long odd = (long)value;
+            finalOddsTabel.put(entry.getKey(), odd);
+
+        }
+
+        return finalOddsTabel;
     }
 
 

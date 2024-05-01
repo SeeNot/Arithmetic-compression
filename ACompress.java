@@ -15,10 +15,9 @@ public class ACompress {
         sourceFile = sc.next();
         System.out.print("archive name: ");
         resultFile = sc.next();
-        long maxValue = (long)Math.pow(2,63);
+        Long maxValue = (long)Math.pow(2,63);
         System.out.println(maxValue);
-        long minValue = 0L;
-        long halfValue = maxValue/2;
+        Long halfValue = maxValue/2;
         long quarterValue = maxValue/4;
 
 
@@ -50,33 +49,48 @@ public class ACompress {
                     lowerLimit = oddsTable.get(letter)[0];
                     upperLimit = oddsTable.get(letter)[1];
 
-                    difference = upperLimit - lowerLimit;
 
 
 
-                    System.out.println(lowerLimit + " " + upperLimit + " " + difference);
+//                    System.out.println(lowerLimit + " " + upperLimit + " " + difference);
 
                     while (true) {
-                        if (upperLimit < halfValue) {
+                        if (Long.compareUnsigned(halfValue, upperLimit) == 1) {
                             toOut <<= 1;
                             counter++;
-                            tryToOutput(toOut, counter, unseenBits, resultFile);
+
+                            if (tryToOutput(toOut, counter, unseenBits, resultFile)){
+                                counter = 0;
+                                for (int i = 0; i< unseenBits; i++) {
+                                    toOut |= 1;
+                                    toOut <<= 1;
+                                }
+                            }
                             upperLimit <<= 1;
                             lowerLimit <<= 1;
-                        } else if (lowerLimit >= halfValue) {
+                        } else if (Long.compareUnsigned(halfValue, lowerLimit) != 1) {
                             toOut |= 1;
                             toOut <<= 1;
                             counter++;
-                            tryToOutput(toOut, counter, unseenBits, resultFile);
+                            for (int i = 0; i< unseenBits; i++) {
+                                toOut <<= 1;
+                            }
+                            if (tryToOutput(toOut, counter, unseenBits, resultFile)){
+                                counter = 0;
+                            }
                             upperLimit = 2*(upperLimit-halfValue);
                             lowerLimit = 2*(lowerLimit-halfValue);
-                        } else if (lowerLimit >= quarterValue && upperLimit < quarterValue * 3) {
+                        } else if (Long.compareUnsigned(quarterValue, lowerLimit) != 1 && Long.compareUnsigned(quarterValue*3, upperLimit) == 1) {
                             unseenBits++;
                             lowerLimit = 2*(lowerLimit - quarterValue);
                             upperLimit = 2*(upperLimit - quarterValue);
                             counter++;
-                            tryToOutput(toOut, counter, unseenBits, resultFile);
-                        } else break;
+
+                        } else{
+                            difference = upperLimit - lowerLimit;
+                            oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, difference, lowerLimit);
+                            break;
+                        }
 
 
 
@@ -90,7 +104,6 @@ public class ACompress {
 
             }
 
-            long intendedupper = Long.MAX_VALUE, intendedlower;
 
 
 
@@ -113,12 +126,11 @@ public class ACompress {
 
     }
 
-    public static void tryToOutput(byte theByte, byte counter, byte unseenBits, String resultFile) {
+    public static boolean tryToOutput(byte theByte, byte counter, byte unseenBits, String resultFile) {
 
         if (counter == 7) {
             try {
                 FileOutputStream output = new FileOutputStream(resultFile, true);
-                counter = 0;
                 byte lastBit = (byte) ((theByte >> 1) & 1);
                 for (int i = 0; i < unseenBits; i++) {
                     if (lastBit == 0) {
@@ -130,13 +142,14 @@ public class ACompress {
                 }
                 theByte <<= 1;
                 output.write(theByte);
-                output.write(theByte);
+                output.close();
+                return true;
             } catch (Exception e){
                 System.out.println(e.getMessage());
             }
 
         }
-
+        return false;
 
     }
 
