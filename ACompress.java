@@ -52,32 +52,60 @@ public class ACompress {
 
 
 
-                    System.out.println(lowerLimit + " " + upperLimit);
+                    //System.out.println(lowerLimit + " " + upperLimit);
 
                     while (true) {
                         if (Long.compareUnsigned(halfValue, upperLimit) == 1) {
                             toOut <<= 1;
                             counter++;
 
-                            if (tryToOutput(toOut, counter, unseenBits, resultFile)){
-                                counter = 0;
-                                for (int i = 0; i< unseenBits; i++) {
-                                    toOut |= 1;
-                                    toOut <<= 1;
+
+                            for (int i = 0; i < unseenBits; unseenBits--) {
+
+                                if (counter == 7) {
+                                    tryToOutput(toOut, resultFile);
+                                    counter = 0;
+                                    toOut = 0;
                                 }
+
+                                toOut |= 1;
+                                toOut <<= 1;
+                                counter++;
                             }
+                            if (counter == 7){
+                                tryToOutput(toOut, resultFile);
+                                toOut = 0;
+
+                                counter = 0;
+
+                            }
+
                             upperLimit <<= 1;
                             lowerLimit <<= 1;
                         } else if (Long.compareUnsigned(halfValue, lowerLimit) != 1) {
                             toOut |= 1;
                             toOut <<= 1;
                             counter++;
-                            for (int i = 0; i< unseenBits; i++) {
+                            for (int i = 0; i< unseenBits; unseenBits--) {
+
+                                if (counter == 7) {
+                                    tryToOutput(toOut, resultFile);
+                                    toOut = 0;
+
+                                    counter = 0;
+                                }
                                 toOut <<= 1;
+                                counter++;
                             }
-                            if (tryToOutput(toOut, counter, unseenBits, resultFile)){
+
+                            if (counter == 7){
+                                tryToOutput(toOut, resultFile);
+                                toOut = 0;
+
                                 counter = 0;
                             }
+
+
                             upperLimit = 2*(upperLimit-halfValue);
                             lowerLimit = 2*(lowerLimit-halfValue);
                         } else if (Long.compareUnsigned(quarterValue, lowerLimit) != 1 && Long.compareUnsigned(quarterValue*3, upperLimit) == 1) {
@@ -86,29 +114,19 @@ public class ACompress {
                             upperLimit = 2*(upperLimit - quarterValue);
                             counter++;
 
-                        } else{
+                        } else {
                             difference = upperLimit - lowerLimit;
                             oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, difference, lowerLimit);
                             break;
                         }
-
-
-
+                        //System.out.println(counter);
                     }
-
-
-
-
 
                 }
 
             }
 
             System.out.println("Done");
-
-
-
-
 
 //            for (HashMap.Entry<Character,long[]> entry : oddsTable.entrySet()) {
 //                System.out.println(entry.getKey() + " " + entry.getValue()[0] + " " + entry.getValue()[1]);
@@ -121,44 +139,22 @@ public class ACompress {
         }
 
 
-
-
-
-
-
     }
 
-    public static boolean tryToOutput(byte theByte, byte counter, byte unseenBits, String resultFile) {
+    public static void tryToOutput(byte theByte, String resultFile) {
 
-        if (counter == 7) {
-            try {
-                FileOutputStream output = new FileOutputStream(resultFile, true);
-                byte lastBit = (byte) ((theByte >> 1) & 1);
-                for (int i = 0; i < unseenBits; i++) {
-                    if (lastBit == 0) {
-                        theByte |= 1;
-                        theByte <<= 1;
-                    } else {
-                        theByte <<= 1;
-                    }
-                }
-                theByte <<= 1;
-                output.write(theByte);
-                output.close();
-                return true;
-            } catch (Exception e){
-                System.out.println(e.getMessage());
-            }
+        try {
+            FileOutputStream output = new FileOutputStream(resultFile, true);
 
+            theByte <<= 1;
+            output.write(theByte);
+            output.close();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
-        return false;
+
+
 
     }
-
-
-
-
-
-
 
 }
