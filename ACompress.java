@@ -15,9 +15,9 @@ public class ACompress {
         sourceFile = sc.next();
         System.out.print("archive name: ");
         resultFile = sc.next();
-        Long maxValue = (long)Math.pow(2,63);
+        long maxValue = (long)Math.pow(2,62);
         System.out.println(maxValue);
-        Long halfValue = maxValue/2;
+        long halfValue = maxValue/2;
         long quarterValue = maxValue/4;
 
 
@@ -52,7 +52,7 @@ public class ACompress {
 
 
 
-//                    System.out.println(lowerLimit + " " + upperLimit + " " + difference);
+                    System.out.println(lowerLimit + " " + upperLimit);
 
                     while (true) {
                         if (Long.compareUnsigned(halfValue, upperLimit) == 1) {
@@ -103,6 +103,8 @@ public class ACompress {
                 }
 
             }
+
+            System.out.println("Done");
 
 
 
