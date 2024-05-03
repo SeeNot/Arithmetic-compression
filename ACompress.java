@@ -39,6 +39,7 @@ public class ACompress {
             long upperLimit, lowerLimit, difference;
             byte unseenBits = 0, toOut = 0, counter = 0;
             HashMap<Character,long[]> oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, maxValue);
+            tableEmbeder(oddsTable, resultFile);
             br = new BufferedReader
                     (new InputStreamReader
                             (new FileInputStream(sourceFile), StandardCharsets.UTF_8));
@@ -157,4 +158,39 @@ public class ACompress {
 
     }
 
+
+    public static void tableEmbeder (HashMap<Character,long[]> simbolsSkaits, String resultFile) {
+
+        String numericValueOfSymbol;
+        String numericValueOfCount;
+        byte outPutByte = 0;
+        int counter = 0;
+        try {
+            FileOutputStream output = new FileOutputStream(resultFile, true);
+
+            for (HashMap.Entry<Character, long[]> entry : simbolsSkaits.entrySet()) {
+
+                numericValueOfSymbol = Integer.toBinaryString(Character.getNumericValue(entry.getKey()));
+
+                for (int i = 0; i < numericValueOfSymbol.length(); i++) {
+                    if (numericValueOfSymbol.charAt(i) == '0') outPutByte <<= 1;
+                    else outPutByte |= 1; outPutByte <<= 1;
+                    counter++;
+                    if (counter == 8) output.write(outPutByte);
+                }
+
+                numericValueOfCount = Integer.toBinaryString((int) entry.getValue()[0]);
+
+                for (int i = 0; i < numericValueOfCount.length(); i++) {
+                    if (numericValueOfSymbol.charAt(i) == '0') outPutByte <<= 1;
+                    else outPutByte |= 1; outPutByte <<= 1;
+                    counter++;
+                    if (counter == 8) output.write(outPutByte);
+                }
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+    }
 }
