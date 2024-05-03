@@ -23,6 +23,8 @@ public class ADecompress {
             for(int i = 0; i < dynamicArray.size(); i++) {
                 output[i] = dynamicArray.get(i).byteValue();
             }
+
+            reader.close();
         }
         catch (FileNotFoundException ex) {
             System.out.println("readFile() could not find " + filename);
@@ -30,6 +32,7 @@ public class ADecompress {
         catch (IOException ex) {
             System.out.println("readFile() IO error!");
         }
+
         return output;
     }
 
