@@ -16,8 +16,8 @@ public class Main {
         String sourceFile, firstFile, secondFile;
 
         loop: while (true) {
-
-            choiseStr = sc.next();
+// C:\Users\ozoli\Desktop\testaFails_1.txt
+            choiseStr = sc.nextLine();
 
             switch (choiseStr) {
                 case "comp":
@@ -49,6 +49,7 @@ public class Main {
 
         sc.close();
     }
+
 
 
     public static void size(String sourceFile) {

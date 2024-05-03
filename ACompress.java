@@ -39,7 +39,7 @@ public class ACompress {
             long upperLimit, lowerLimit, difference;
             byte unseenBits = 0, toOut = 0, counter = 0;
             HashMap<Character,long[]> oddsTable = PCalculator.recalculateOddsTabel(charCounter, charAmount, maxValue);
-            tableEmbeder(oddsTable, resultFile);
+            tableEmbeder(charCounter, resultFile);
             br = new BufferedReader
                     (new InputStreamReader
                             (new FileInputStream(sourceFile), StandardCharsets.UTF_8));
@@ -159,7 +159,7 @@ public class ACompress {
     }
 
 
-    public static void tableEmbeder (HashMap<Character,long[]> simbolsSkaits, String resultFile) {
+    public static void tableEmbeder (HashMap<Character,Integer> charCounter, String resultFile) {
 
         String numericValueOfSymbol;
         String numericValueOfCount;
@@ -168,7 +168,7 @@ public class ACompress {
         try {
             FileOutputStream output = new FileOutputStream(resultFile, true);
 
-            for (HashMap.Entry<Character, long[]> entry : simbolsSkaits.entrySet()) {
+            for (HashMap.Entry<Character, Integer> entry : charCounter.entrySet()) {
 
                 numericValueOfSymbol = Integer.toBinaryString(Character.getNumericValue(entry.getKey()));
 
@@ -179,7 +179,7 @@ public class ACompress {
                     if (counter == 8) output.write(outPutByte);
                 }
 
-                numericValueOfCount = Integer.toBinaryString((int) entry.getValue()[0]);
+                numericValueOfCount = Integer.toBinaryString(entry.getValue());
 
                 for (int i = 0; i < numericValueOfCount.length(); i++) {
                     if (numericValueOfSymbol.charAt(i) == '0') outPutByte <<= 1;
@@ -187,6 +187,9 @@ public class ACompress {
                     counter++;
                     if (counter == 8) output.write(outPutByte);
                 }
+
+                output.write(outPutByte);
+
             }
         } catch (Exception e){
             System.out.println(e.getMessage());
