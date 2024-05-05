@@ -126,6 +126,14 @@ public class ACompress {
                 }
 
             }
+            FileOutputStream output = new FileOutputStream(resultFile, true);
+
+            
+            toOut <<= 1;
+            output.write(toOut);
+            output.close();
+            
+            
 
             System.out.println("Done");
 
