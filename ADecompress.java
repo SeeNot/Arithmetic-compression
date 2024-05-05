@@ -3,6 +3,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class ADecompress {
@@ -43,12 +44,53 @@ public class ADecompress {
         sourceFile = sc.next();
         System.out.print("archive name: ");
         resultFile = sc.next();
+        int size;
+        byte[] masivs = readFile(sourceFile);
+        long maxValue = (long)Math.pow(2,62);
+        int burts = 0;
+        int skaits = 0;
 
+        HashMap<Integer,Integer> Tabula = new HashMap<>();
+
+        int tabulasBeigas = 0;
+        for (int i = 0; i < masivs.length; i++) {
+            size = masivs[i];
+            System.out.println("IZMERS BURTAM= "+ size);
+            if (size==0){
+                tabulasBeigas = 1;
+                break;
+            }
+            while (size>0){
+                i++;
+                size--;
+                burts = burts << 8;
+                burts = masivs[i]|burts;
+
+                // TODO parveidot int uz char
+                }
+            i++;
+            size = masivs[i];
+            System.out.println("IZMERS SKAITAM= "+ size);
+
+            while (size>0){
+                i++;
+                size--;
+                skaits = skaits >> 8;
+                skaits = masivs[i]|skaits;
+            }
+            System.out.println("Skaits-" + skaits +"| Burts-"+ burts);
+            Tabula.put(burts, skaits);
+            burts = 0;
+            skaits = 0;
+            }
+
+        for ( int key : Tabula.keySet() ) {
+            System.out.println( key );
+        }
 
         sc.close();
-
+        }
 
     }
 
 
-}
