@@ -37,6 +37,30 @@ public class ADecompress {
         return output;
     }
 
+    static HashMap<Character, long[]> getIntervalTable(HashMap<Character, Integer> table) {
+        long MAX = (long)Math.pow(2,62);
+        HashMap<Character, long[]> output = new HashMap<>();
+
+        int overallCharCount = 0;
+        for (int value : table.values()) {
+            overallCharCount += value;
+        }
+
+        long sectionValue = MAX / overallCharCount;
+        long lastInterval = 0;
+        for (char c : table.keySet()) {
+            int count = table.get(c);
+            long intervalEnd = lastInterval + (sectionValue * count);
+            long intervalStart = lastInterval;
+            lastInterval = intervalEnd;
+
+            output.put(c, new long[]{intervalStart, intervalEnd} );
+        }
+
+        return output;
+    }
+
+
     public static void deCompress(){
         String sourceFile, resultFile;
         Scanner sc = new Scanner(System.in);
@@ -50,7 +74,7 @@ public class ADecompress {
         int burts = 0;
         int skaits = 0;
 
-        HashMap<Integer,Integer> Tabula = new HashMap<>();
+        HashMap<Character,Integer> Tabula = new HashMap<>();
 
         int tabulasBeigas = 0;
         for (int i = 0; i < masivs.length; i++) {
@@ -65,8 +89,6 @@ public class ADecompress {
                 size--;
                 burts = burts << 8;
                 burts = masivs[i]|burts;
-
-                // TODO parveidot int uz char
                 }
             i++;
             size = masivs[i];
@@ -78,15 +100,18 @@ public class ADecompress {
                 skaits = skaits >> 8;
                 skaits = masivs[i]|skaits;
             }
-            System.out.println("Skaits-" + skaits +"| Burts-"+ burts);
-            Tabula.put(burts, skaits);
+            Tabula.put((char) burts, skaits);
             burts = 0;
             skaits = 0;
-            }
-
-        for ( int key : Tabula.keySet() ) {
-            System.out.println( key );
         }
+        
+        HashMap<Character, long[]> intervalTable = getIntervalTable(Tabula);
+        
+        for (char c : intervalTable.keySet()) {
+            long[] interval = intervalTable.get(c);
+            System.out.println(Character.toString(c) + " " + interval[0] + " " + interval[1]);
+        }
+        
 
         sc.close();
         }
