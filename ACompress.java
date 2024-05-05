@@ -180,7 +180,7 @@ public class ACompress {
 
                 cikIrNakamoByte = (int) Math.ceil(Integer.toBinaryString((int) entry.getKey()).length()/8.0);
                 outPutByte = (byte) cikIrNakamoByte;
-                output.write(outPutByte);
+                output.write(outPutByte); // to cik daudz būs
                 outPutByte = 0;
 
                 for (int i = 0; i < numericValueOfSymbol.length() - 1; i++) {
@@ -194,8 +194,11 @@ public class ACompress {
                     outPutByte <<= 1;
 
                 }
+                if (counter != 0)  {
+                    output.write(outPutByte);
+                    counter = 0;
+                }
 
-                output.write(outPutByte);
 
 
                 numericValueOfCount = Integer.toBinaryString(entry.getValue());
@@ -216,8 +219,10 @@ public class ACompress {
                     }
                     outPutByte <<= 1;
                 }
-
-                output.write(outPutByte);
+                if (counter != 0)  {
+                    output.write(outPutByte);
+                    counter = 0;
+                }
 
 
 
