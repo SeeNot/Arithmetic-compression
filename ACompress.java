@@ -1,4 +1,3 @@
-import jdk.jfr.StackTrace;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -137,10 +136,6 @@ public class ACompress {
 
             System.out.println("Done");
 
-//            for (HashMap.Entry<Character,long[]> entry : oddsTable.entrySet()) {
-//                System.out.println(entry.getKey() + " " + entry.getValue()[0] + " " + entry.getValue()[1]);
-//
-//            }
 
 
         } catch (Exception e){
@@ -171,9 +166,9 @@ public class ACompress {
         String numericValueOfSymbol;
         String numericValueOfCount;
 
-        int cikIrNakamoByte = 0;
+        int cikIrNakamoByte;
 
-        byte outPutByte = 0;
+        byte outPutByte;
         int counter = 0;
         try {
             FileOutputStream output = new FileOutputStream(resultFile, true);
@@ -227,7 +222,10 @@ public class ACompress {
 
 
             }
+            byte zero = 0;
+            output.write(zero);
         } catch (Exception e){
+
             System.out.println(e.getMessage());
         }
 
