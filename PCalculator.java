@@ -23,6 +23,8 @@ public class PCalculator {
             finalOddsTabel.put(entry.getKey(), limiti);
             apaksejaVertiba += iedalasvertiba*entry.getValue();
 
+
+
         }
 
         return finalOddsTabel;
