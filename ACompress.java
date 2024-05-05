@@ -168,6 +168,9 @@ public class ACompress {
 
         int cikIrNakamoByte;
 
+        int cikVajagNullites;
+        String pievienoajamNulles = "";
+
         byte outPutByte;
         int counter = 0;
         try {
@@ -177,6 +180,17 @@ public class ACompress {
 
                 numericValueOfSymbol = Integer.toBinaryString((int) entry.getKey());
 
+                cikVajagNullites = 8 - numericValueOfSymbol.length() % 8;
+
+                for(int i = 0; i < cikVajagNullites; i++) {
+                    pievienoajamNulles +=  "0";
+                }
+
+
+                numericValueOfSymbol = pievienoajamNulles + numericValueOfSymbol;
+                System.out.println(numericValueOfSymbol);
+
+                pievienoajamNulles = "";
 
                 cikIrNakamoByte = (int) Math.ceil(Integer.toBinaryString((int) entry.getKey()).length()/8.0);
                 outPutByte = (byte) cikIrNakamoByte;
@@ -202,6 +216,17 @@ public class ACompress {
 
 
                 numericValueOfCount = Integer.toBinaryString(entry.getValue());
+
+                cikVajagNullites = 8 - numericValueOfCount.length() % 8;
+
+                for(int i = 0; i < cikVajagNullites; i++) {
+                    pievienoajamNulles +=  "0";
+                }
+
+                numericValueOfCount = pievienoajamNulles + numericValueOfCount;
+                System.out.println(numericValueOfCount);
+                pievienoajamNulles = "";
+
                 cikIrNakamoByte = (int) Math.ceil(Integer.toBinaryString( entry.getValue()).length()/8.0);
 
                 outPutByte = (byte) cikIrNakamoByte;
