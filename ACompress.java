@@ -197,7 +197,7 @@ public class ACompress {
                 output.write(outPutByte); // to cik daudz būs
                 outPutByte = 0;
 
-                for (int i = 0; i < numericValueOfSymbol.length() - 1; i++) {
+                for (int i = 0; i < numericValueOfSymbol.length(); i++) {
                     if (numericValueOfSymbol.charAt(i) == '1') outPutByte |= 1;
                     counter++;
                     if (counter == 8)  {
@@ -234,7 +234,7 @@ public class ACompress {
                 outPutByte = 0;
 
 
-                for (int i = 0; i < numericValueOfCount.length() - 1; i++) {
+                for (int i = 0; i < numericValueOfCount.length(); i++) {
                     if (numericValueOfCount.charAt(i) == '1') outPutByte |= 1;
                     counter++;
                     if (counter == 8)  {
