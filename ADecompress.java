@@ -37,8 +37,7 @@ public class ADecompress {
         return output;
     }
 
-    static HashMap<Character, long[]> getIntervalTable(HashMap<Character, Integer> table) {
-        long MAX = (long)Math.pow(2,62);
+    static HashMap<Character, long[]> getIntervalTable(HashMap<Character, Integer> table, long end, long start) {
         HashMap<Character, long[]> output = new HashMap<>();
 
         int overallCharCount = 0;
@@ -46,8 +45,8 @@ public class ADecompress {
             overallCharCount += value;
         }
 
-        long sectionValue = MAX / overallCharCount;
-        long lastInterval = 0;
+        long sectionValue = end / overallCharCount;
+        long lastInterval = start;
         for (char c : table.keySet()) {
             int count = table.get(c);
             long intervalEnd = lastInterval + (sectionValue * count);
@@ -81,7 +80,7 @@ public class ADecompress {
             size = masivs[i];
             System.out.println("IZMERS BURTAM= "+ size);
             if (size==0){
-                tabulasBeigas = 1;
+                tabulasBeigas = i;
                 break;
             }
             while (size>0){
@@ -97,15 +96,24 @@ public class ADecompress {
             while (size>0){
                 i++;
                 size--;
-                skaits = skaits >> 8;
+                skaits = skaits << 8;
                 skaits = masivs[i]|skaits;
             }
             Tabula.put((char) burts, skaits);
             burts = 0;
             skaits = 0;
         }
+
+        long garais = 0;
+        for (int i = tabulasBeigas+1; i < masivs.length; i++){
+            garais = garais << 8;
+            garais = masivs[i]|garais;
+        }
+
+
+
         
-        HashMap<Character, long[]> intervalTable = getIntervalTable(Tabula);
+        HashMap<Character, long[]> intervalTable = getIntervalTable(Tabula, (long)Math.pow(2,62), 0);
         
         for (char c : intervalTable.keySet()) {
             long[] interval = intervalTable.get(c);
