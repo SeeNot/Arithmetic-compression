@@ -1,13 +1,9 @@
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class ADecompress {
-
     static byte[] readFile(String filename) {
         byte[] output = new byte[0];
 
@@ -36,6 +32,45 @@ public class ADecompress {
 
         return output;
     }
+    public static void tryToOutput(char theByte, String resultFile) {
+
+        try {
+            FileOutputStream output = new FileOutputStream(resultFile, true);
+
+            output.write(theByte);
+            output.close();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+
+
+    }
+    static void doIntervalTable(HashMap<Character, Integer> table, long end, long start, long garais, String resultFile, int counter) {
+        HashMap<Character, long[]> output = new HashMap<>();
+
+        int overallCharCount = 0;
+        for (int value : table.values()) {
+            overallCharCount += value;
+        }
+
+        long sectionValue = end / overallCharCount;
+        long lastInterval = start;
+        for (char c : table.keySet()) {
+            int count = table.get(c);
+            long intervalEnd = lastInterval + (sectionValue * count);
+            long intervalStart = lastInterval;
+            lastInterval = intervalEnd;
+            if (counter != overallCharCount) {
+                if (intervalStart <= garais && garais <= intervalEnd) {
+                    tryToOutput(c, resultFile);
+                    doIntervalTable(table, intervalEnd, intervalStart, garais, resultFile, counter++);
+                }
+            }
+        }
+
+    }
+
 
     public static void deCompress(){
         String sourceFile, resultFile;
@@ -50,14 +85,13 @@ public class ADecompress {
         int burts = 0;
         int skaits = 0;
 
-        HashMap<Integer,Integer> Tabula = new HashMap<>();
+        HashMap<Character,Integer> Tabula = new HashMap<>();
 
         int tabulasBeigas = 0;
         for (int i = 0; i < masivs.length; i++) {
             size = masivs[i];
-            System.out.println("IZMERS BURTAM= "+ size);
             if (size==0){
-                tabulasBeigas = 1;
+                tabulasBeigas = i;
                 break;
             }
             while (size>0){
@@ -65,30 +99,32 @@ public class ADecompress {
                 size--;
                 burts = burts << 8;
                 burts = masivs[i]|burts;
-
-                // TODO parveidot int uz char
                 }
             i++;
             size = masivs[i];
-            System.out.println("IZMERS SKAITAM= "+ size);
 
             while (size>0){
                 i++;
                 size--;
-                skaits = skaits >> 8;
+                skaits = skaits << 8;
                 skaits = masivs[i]|skaits;
             }
-            System.out.println("Skaits-" + skaits +"| Burts-"+ burts);
-            Tabula.put(burts, skaits);
+            Tabula.put((char) burts, skaits);
             burts = 0;
             skaits = 0;
-            }
-
-        for ( int key : Tabula.keySet() ) {
-            System.out.println( key );
         }
 
+        long garais = 0;
+        for (int i = tabulasBeigas+1; i < masivs.length; i++){
+            garais = garais << 8;
+            garais = masivs[i]|garais;
+        }
+
+        doIntervalTable(Tabula, (long)Math.pow(2,62), 0, garais, resultFile, 0);
+        
+
         sc.close();
+        System.out.println("Done");
         }
 
     }
