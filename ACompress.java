@@ -55,7 +55,7 @@ public class ACompress {
                     //System.out.println(lowerLimit + " " + upperLimit);
 
                     while (true) {
-                        if (Long.compareUnsigned(halfValue, upperLimit) == 1) {
+                        if (Long.compareUnsigned(halfValue, upperLimit) == 1 || Long.compareUnsigned(halfValue, upperLimit) == 0) {
                             toOut <<= 1;
                             counter++;
 
@@ -80,9 +80,9 @@ public class ACompress {
 
                             }
 
-                            upperLimit <<= 1;
-                            lowerLimit <<= 1;
-                        } else if (Long.compareUnsigned(halfValue, lowerLimit) != 1) {
+                            upperLimit *= 2;
+                            lowerLimit *= 2;
+                        } else if (Long.compareUnsigned(halfValue, lowerLimit) == -1) {
                             toOut |= 1;
                             toOut <<= 1;
                             counter++;
@@ -108,7 +108,7 @@ public class ACompress {
 
                             upperLimit = 2*(upperLimit-halfValue);
                             lowerLimit = 2*(lowerLimit-halfValue);
-                        } else if (Long.compareUnsigned(quarterValue, lowerLimit) != 1 && Long.compareUnsigned(quarterValue*3, upperLimit) == 1) {
+                        } else if (Long.compareUnsigned(quarterValue, lowerLimit) == -1 && Long.compareUnsigned(quarterValue*3, upperLimit) == 1) {
                             unseenBits++;
                             lowerLimit = 2*(lowerLimit - quarterValue);
                             upperLimit = 2*(upperLimit - quarterValue);
