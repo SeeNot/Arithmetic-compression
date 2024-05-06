@@ -55,7 +55,7 @@ public class ACompress {
                     //System.out.println(lowerLimit + " " + upperLimit);
 
                     while (true) {
-                        if (Long.compareUnsigned(halfValue, upperLimit) == 1 || Long.compareUnsigned(halfValue, upperLimit) == 0) {
+                        if (Long.compareUnsigned(halfValue, upperLimit) == 1) {
                             toOut <<= 1;
                             counter++;
 
@@ -82,7 +82,7 @@ public class ACompress {
 
                             upperLimit *= 2;
                             lowerLimit *= 2;
-                        } else if (Long.compareUnsigned(halfValue, lowerLimit) == -1) {
+                        } else if (Long.compareUnsigned(halfValue, lowerLimit) != 1) {
                             toOut |= 1;
                             toOut <<= 1;
                             counter++;
@@ -108,7 +108,7 @@ public class ACompress {
 
                             upperLimit = 2*(upperLimit-halfValue);
                             lowerLimit = 2*(lowerLimit-halfValue);
-                        } else if (Long.compareUnsigned(quarterValue, lowerLimit) == -1 && Long.compareUnsigned(quarterValue*3, upperLimit) == 1) {
+                        } else if (Long.compareUnsigned(quarterValue, lowerLimit) != 1 && Long.compareUnsigned(quarterValue*3, upperLimit) == 1) {
                             unseenBits++;
                             lowerLimit = 2*(lowerLimit - quarterValue);
                             upperLimit = 2*(upperLimit - quarterValue);
@@ -188,7 +188,6 @@ public class ACompress {
 
 
                 numericValueOfSymbol = pievienoajamNulles + numericValueOfSymbol;
-                System.out.println(numericValueOfSymbol);
 
                 pievienoajamNulles = "";
 
@@ -224,7 +223,6 @@ public class ACompress {
                 }
 
                 numericValueOfCount = pievienoajamNulles + numericValueOfCount;
-                System.out.println(numericValueOfCount);
                 pievienoajamNulles = "";
 
                 cikIrNakamoByte = (int) Math.ceil(Integer.toBinaryString( entry.getValue()).length()/8.0);
